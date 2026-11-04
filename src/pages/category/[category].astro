@@ -1,0 +1,17 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import ArticleCard from '../../components/ArticleCard.astro';
+import { getCollection } from 'astro:content';
+const categoryNames = ['World', 'Technology', 'Business', 'Politics', 'Science', 'Health', 'Culture', 'Lifestyle', 'Travel', 'Entertainment', 'Sports'];
+export async function getStaticPaths() {
+  const all = await getCollection('articles', ({ data }) => !data.draft);
+  const names = [...new Set([...categoryNames, ...all.map((post) => post.data.category)])];
+  return names.map((category) => ({ params: { category: category.toLowerCase().replace(/[^a-z0-9]+/g, '-') }, props: { category } }));
+}
+const { category } = Astro.props;
+const all = await getCollection('articles', ({ data }) => !data.draft);
+const posts = all.filter((post) => post.data.category.toLowerCase() === category.toLowerCase()).sort((a, b) => b.data.publishedAt.valueOf() - a.data.publishedAt.valueOf());
+---
+<BaseLayout title={category} description={`Latest stories, news and analysis in ${category}.`}>
+  <section class="wrap listing-page"><p class="section-kicker">EXPLORE THE JOURNAL</p><h1>{category}<span>.</span></h1><p class="listing-intro">The latest reporting, ideas and perspectives from our {category} desk.</p>{posts.length ? <div class="story-grid">{posts.map((article) => <ArticleCard article={article} />)}</div> : <p class="muted">There are no published stories in this section yet.</p>}</section>
+</BaseLayout>

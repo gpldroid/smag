@@ -1,0 +1,18 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import { getCollection } from 'astro:content';
+const posts = (await getCollection('articles', ({ data }) => !data.draft)).map((post) => ({ id: post.id, title: post.data.title, description: post.data.description, category: post.data.category }));
+---
+<BaseLayout title="Search the journal" description="Find stories, reporting and perspectives from SMAG.">
+  <section class="wrap listing-page search-page"><p class="section-kicker">THE ARCHIVE</p><h1>Find your story<span>.</span></h1><label class="search-box"><span>Search articles</span><input id="story-search" type="search" placeholder="Try technology, culture, business…" /></label><div id="search-results" class="search-results" aria-live="polite"></div></section>
+  <script define:vars={{ posts }}>
+    const input = document.querySelector('#story-search');
+    const results = document.querySelector('#search-results');
+    function render(query = '') {
+      const matches = posts.filter((post) => (post.title + ' ' + post.description + ' ' + post.category).toLowerCase().includes(query.toLowerCase()));
+      results.innerHTML = matches.length ? matches.map((post) => `<article class="search-result"><p>${post.category}</p><h2><a href="/articles/${encodeURIComponent(post.id)}/">${post.title}</a></h2><p>${post.description}</p></article>`).join('') : '<p class="muted">No stories found. Try another search.</p>';
+    }
+    render();
+    input.addEventListener('input', (event) => render(event.target.value));
+  </script>
+</BaseLayout>

@@ -1,0 +1,20 @@
+---
+interface Props {
+  article: any;
+  variant?: 'feature' | 'standard' | 'compact';
+}
+const { article, variant = 'standard' } = Astro.props;
+const href = `/articles/${article.id}/`;
+---
+<article class:list={['article-card', `card-${variant}`]}>
+  <a class="card-image" href={href} aria-label={article.data.title}>
+    <img src={article.data.cover} alt={article.data.coverAlt} loading={variant === 'feature' ? 'eager' : 'lazy'} />
+    {variant === 'feature' && <span class="image-label">EDITOR'S PICK</span>}
+  </a>
+  <div class="card-body">
+    <div class="eyebrow"><a href={`/category/${article.data.category.toLowerCase().replace(/[^a-z0-9]+/g, '-')}/`}>{article.data.category}</a><span>·</span><span>{article.data.type}</span></div>
+    <h2><a href={href}>{article.data.title}</a></h2>
+    {variant !== 'compact' && <p>{article.data.description}</p>}
+    <div class="byline"><span>{article.data.author}</span><span>·</span><time datetime={article.data.publishedAt.toISOString()}>{article.data.publishedAt.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}</time></div>
+  </div>
+</article>

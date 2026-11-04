@@ -1,0 +1,29 @@
+---
+const nav = [
+  ['World', '/category/world/'],
+  ['Technology', '/category/technology/'],
+  ['Business', '/category/business/'],
+  ['Culture', '/category/culture/'],
+  ['Lifestyle', '/category/lifestyle/']
+];
+---
+<a class="skip-link" href="#main-content">Skip to content</a>
+<header class="site-header">
+  <div class="topline"><span>Independent ideas. Clear perspectives.</span><span class="topline-date">THE DAILY EDITION</span></div>
+  <div class="header-main wrap">
+    <button class="icon-button menu-toggle" data-menu-toggle aria-label="Open navigation" aria-expanded="false">☰</button>
+    <a class="wordmark" href="/" aria-label="SMAG home">SMAG<span>.</span></a>
+    <p class="header-note">A MODERN EDITORIAL JOURNAL</p>
+    <div class="header-actions">
+      <a class="search-link" href="/search/">Search</a>
+      <button class="icon-button" data-theme-toggle aria-label="Toggle color theme">◐</button>
+    </div>
+  </div>
+  <nav class="primary-nav" data-primary-nav aria-label="Primary navigation">
+    <div class="wrap nav-inner">
+      <a href="/" class="nav-home">Home</a>
+      {nav.map(([label, href]) => <a href={href}>{label}</a>)}
+      <a href="/about/">About</a>
+    </div>
+  </nav>
+</header>
